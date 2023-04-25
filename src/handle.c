@@ -1,4 +1,4 @@
-
+#define Py_REFCNT_OLD(o) (((PyObject*)(o))->ob_refcnt)
 /* Taken from http://bugs.python.org/issue8212
  * A function to do the necessary adjustments if we find that code
  * run during a tp_dealloc or tp_free has resurrected an
@@ -14,7 +14,7 @@ resurrect_object(PyObject *self)
     Py_ssize_t refcnt = Py_REFCNT(self);
     ASSERT(Py_REFCNT(self) != 0);
     _Py_NewReference(self);
-    Py_REFCNT(self) = refcnt;
+    Py_REFCNT_OLD(self) = refcnt;
     /* If Py_REF_DEBUG, _Py_NewReference bumped _Py_RefTotal, so
      * we need to undo that. */
 #ifdef _Py_DEC_REFTOTAL
